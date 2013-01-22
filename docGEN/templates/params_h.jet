@@ -1,0 +1,70 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="params_h" %>
+<%
+    String header_guide =rpc.Helper.getIncludeGuide(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eParamsHeader);
+%>
+#ifndef <%=header_guide%>
+#define <%=header_guide%>
+
+#include "ipc/ipc_param_traits.h"
+#include "rpc/public/rpc_interface.h"
+#include "rpc/base/rpc_message_traits.h"
+#include "rpc/base/rpc_param_traits.h"
+#include "rpc/public/rpc_impl_helper.h"
+#include "<%=rpc.Helper.getRelativePath(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eInterfaceHeader)%>"
+
+namespace RPC
+{
+<% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().interfaces()) { %>
+    template<>
+    struct MethodInfos< <%=rpc.Helper.convertCPPType(cls)%> >
+    {
+        <%
+        int methodId = 1; 
+        for(MethodDoc method: cls.methods()) { 
+        %>
+        struct <%=method.name()%>_Params
+        {
+              enum {ID = <%=methodId++ %> };
+              <%for(Parameter param: method.parameters()) { %>
+              <%=rpc.Helper.parameterStorage(param)%>;
+              <% } %>
+        };
+        <% } %>
+    };
+<% } %>
+
+};
+
+namespace IPC
+{
+    <% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().interfaces()) { %>
+    
+    //ParamTraits for <%=rpc.Helper.convertCPPType(cls)%>
+    <%for(MethodDoc method: cls.methods()) {%>    
+     template<>
+    struct ParamTraits<RPC::MethodInfos< <%=rpc.Helper.convertCPPType(cls)%> >::<%=method.name()%>_Params >
+    {
+          typedef RPC::MethodInfos< <%=rpc.Helper.convertCPPType(cls)%> >::<%=method.name()%>_Params param_type;
+            static void Write(Message* m, const param_type& p);
+            static bool Read(const Message* m, PickleIterator* iter, param_type* r);
+            static void Log(const param_type& p, std::string* l);
+    };
+       <% } %>
+    <% } %>
+    
+    <% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().allClasses()) { %>
+    <%if(rpc.Helper.isStructure(cls) || rpc.Helper.isEnum(cls) ) {%>
+    //ParamTraits for <%=rpc.Helper.convertCPPType(cls)%>
+     template<>
+    struct ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >
+    {
+          typedef <%=rpc.Helper.convertCPPType(cls)%> param_type;
+            static void Write(Message* m, const param_type& p);
+            static bool Read(const Message* m, PickleIterator* iter, param_type* r);
+            static void Log(const param_type& p, std::string* l);
+    };
+       <% } %>
+    <% } %>
+};
+
+#endif //#ifndef <%=header_guide%>

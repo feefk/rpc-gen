@@ -1,0 +1,61 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="stubs_cc" %>
+#include "rpc/stub/rpc_service_stub_base.h"
+#include "rpc/stub/rpc_interface_stub_base.h"
+#include "rpc/stub/rpc_invoke_context.h"
+#include "<%=rpc.Helper.getRelativePath(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eInterfaceHeader)%>"
+#include "<%=rpc.Helper.getRelativePath(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eParamsHeader)%>"
+#include "<%=rpc.Helper.getRelativePath(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eProxyHeader)%>"
+
+namespace RPC
+{
+<% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().interfaces()) { %>
+    <%
+    String cppClassName = rpc.Helper.convertCPPType(cls);
+    if(rpc.Helper.isService(cls)) {
+    %>
+    template<>
+    bool ServiceStubBase< <%} else if(rpc.Helper.isInterface(cls)){%>
+    template<>
+    bool InterfaceStubBase< <% }else {
+       continue; 
+    } %><%=cppClassName %> >::OnHandleInvoke(
+        const RPC::InvokeContext& context)
+    {
+        switch (context.header.message_type)
+        {
+        <% for(MethodDoc method: cls.methods()) {%>
+        case RPC::MethodInfos<interface_type>::<%=method.name()%>_Params::ID:
+        {
+            RPC::MethodInfos<interface_type>::<%=method.name()%>_Params params;
+            IPC::ParamTraits<RPC::MethodInfos<interface_type>::<%=method.name()%>_Params>::Read(
+                    context.message, context.iterator, &params);
+            this-><%=method.name()%>(<%
+              boolean isFirstMethod = true;
+              for(Parameter param: method.parameters()) { 
+                  if(isFirstMethod) { isFirstMethod = false; }
+                  else { %>,<% } 
+                  if(!rpc.Helper.isInterface(param))
+			    	{%>
+                    params.<%=param.name()%><%
+			    	}else
+			    	{%>
+                    scoped_refptr<RPC::Proxy<<%=param.type().qualifiedTypeName().replace('.',':').replace(":","::")%> > >( 
+                          new RPC::Proxy< <%=param.type().qualifiedTypeName().replace('.',':').replace(":","::")%>>(params.<%=param.name()%>)).get()<%
+			    	}
+                  %>
+               <% }//End for params %>
+            	  );
+            break;
+        }
+     	<% } //for(MethodDoc method: cls.methods()) %>
+        default:
+            return false;
+        }
+        return true;
+    }
+     <% } //for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().interfaces()) %>
+     
+}// End namespace RPC
+
+
+

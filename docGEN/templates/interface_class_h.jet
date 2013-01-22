@@ -1,0 +1,82 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="interfaces_class_h" %>
+    <%
+    ClassDoc cls = (ClassDoc)argument;
+    %>
+
+    //Class <%=cls.name().replace('.', ':').replace(":", "::")%>
+    class <%=cls.name().replace('.', ':').replace(":", "::")%>: public virtual <% 
+        if(rpc.Helper.isService(cls)) { 
+            %>RPC::IService<%
+        }
+        else{
+            %>RPC::IInterface<%
+        } 
+    %>
+    {
+    public:
+        virtual ~<%=cls.simpleTypeName()%>(){ }
+        <%if(rpc.Helper.isService(cls)){%>
+        static const char* ServiceName()
+        { 
+            return "<%=cls.qualifiedName()%>"; 
+        }
+        <%}%>
+        //Inner Interface Declare
+        <% if(cls.innerClasses() != null)
+           {
+               for(ClassDoc inner: cls.innerClasses())
+               {
+                       if(rpc.Helper.isService(inner)||rpc.Helper.isInterface(inner)  ) { %>
+         class <%=inner.simpleTypeName()%>;<% 
+                     }else if(rpc.Helper.isStructure(inner)) { %>
+         struct <%=inner.simpleTypeName()%>;<%
+                     }else if( rpc.Helper.isEnum(inner) ) { 
+                        enum_class_h cg = new enum_class_h();
+            %><%=cg.generate(inner)%><%
+                     } 
+                 }
+           }
+        %>
+        //Methods 
+        <%
+        for(MethodDoc method: cls.methods()) { 
+        %>
+        virtual void <%=method.name()%>(<%
+              boolean isFirstMethod = true;
+              for(Parameter param: method.parameters()) { 
+                  if(isFirstMethod)
+                  {
+                      isFirstMethod = false;
+                  }
+                  else
+                  {
+                      %>, <%
+                  }
+              %>
+              <%=rpc.Helper.parameterDeclare(param)%>
+              <% }//End for params %>) = 0;
+
+        <% } %>        
+    }; // End Class <%=cls.name().replace('.', ':').replace(":", "::")%>
+    
+    //Inner Interface Define
+    <% if(cls.innerClasses() != null)
+    {
+         for(ClassDoc inner: cls.innerClasses())
+         {
+             if( rpc.Helper.isInterface(inner) || rpc.Helper.isService(inner) ) 
+        { 
+            interfaces_class_h cg = new interfaces_class_h();
+            %><%=cg.generate(inner)%><%
+        } else if (rpc.Helper.isEnum(inner))
+        {
+            
+        }else if ( rpc.Helper.isStructure(inner))
+        {
+            structure_class_h cg = new structure_class_h();
+            %><%=cg.generate(inner)%><%
+        }
+          
+         }
+    }%>
+    

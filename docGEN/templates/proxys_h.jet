@@ -1,0 +1,66 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="proxys_h" %>
+<%
+    String header_guide =rpc.Helper.getIncludeGuide(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eProxyHeader);
+     
+%>
+#ifndef <%=header_guide%>
+#define <%=header_guide%>
+
+#include "rpc/public/rpc_service_proxy_base.h"
+#include "rpc/public/rpc_interface_proxy_base.h"
+#include "<%=rpc.Helper.getRelativePath(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eInterfaceHeader)%>"
+
+namespace RPC
+{
+<% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().interfaces()) { %>
+    <%
+        String cppClassName = rpc.Helper.convertCPPType(cls);
+        boolean isService = rpc.Helper.isService(cls);
+    %>
+    //Proxy for <%=cppClassName%>
+    template<>
+    class Proxy< <%=cppClassName%> > :
+        public <%=cppClassName%>,
+        <%if(isService){%>public RPC::ServiceProxyBase<%}else{%>public RPC::InterfaceProxyBase<%}%>
+    {
+    
+    public:
+        Proxy(<%if(isService){%>const std::string& serviceProvider, <%}%>const RPC::InterfaceHandle& handle)
+               <%
+                   if(isService){
+               %>:RPC::ServiceProxyBase(<%=cppClassName%>::ServiceName(),serviceProvider, handle)<%
+               }else{
+               %>:RPC::InterfaceProxyBase(handle)<%
+               }%>
+        {
+        }
+
+<%
+        for(MethodDoc method: cls.methods()) { 
+        %>
+        
+        virtual void <%=method.name()%>(<%
+              boolean isFirstMethod = true;
+              for(Parameter param: method.parameters()) { 
+                  if(isFirstMethod)
+                  {
+                      isFirstMethod = false;
+                  }
+                  else
+                  {
+                      %>, <%
+                  }
+              %>
+              <%=rpc.Helper.parameterDeclare(param)%>
+              <% }//End for params %>);
+        <% } %>
+        
+    private:
+        //DISALLOW_COPY_AND_ASSIGN
+        Proxy(const Proxy&);
+        void operator=(const Proxy&);
+    };
+<%}%>
+} // End namespace RPC
+
+#endif //#ifndef <%=header_guide%>

@@ -1,0 +1,15 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="structure_class_h" %>
+    <%
+    ClassDoc cls = (ClassDoc)argument;
+    %>
+
+    //struct <%=cls.name().replace('.', ':').replace(":", "::")%>
+    struct <%=cls.name().replace('.', ':').replace(":", "::")%>
+    {
+        //member of structure <%=cls.name().replace('.', ':').replace(":", "::")%>
+        <%
+        for(FieldDoc field: cls.fields()) { 
+        %>
+        <%=rpc.Helper.getFieldTraitsType(field)%> <%=field.name()%>;
+        <% } %>
+    }; // End Class <%=cls.name().replace('.', ':').replace(":", "::")%>

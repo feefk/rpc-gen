@@ -1,0 +1,57 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="params_cc" %>
+#include "<%=rpc.Helper.getRelativePath(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eParamsHeader)%>"
+namespace IPC
+{
+    <% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().interfaces()) { %>
+    
+    //ParamTraits for <%=rpc.Helper.convertCPPType(cls)%>
+    <%for(MethodDoc method: cls.methods()) {%>    
+    void ParamTraits<RPC::MethodInfos<<%=rpc.Helper.convertCPPType(cls)%>>::<%=method.name()%>_Params> ::Write(Message* m, const param_type& p) {        
+        <%for(Parameter param: method.parameters()) { %>
+        WriteParam(m, p.<%=param.name()%>);
+        <% } %>
+        
+    }
+    bool ParamTraits<RPC::MethodInfos<<%=rpc.Helper.convertCPPType(cls)%>>::<%=method.name()%>_Params>::Read(const Message* m,
+                                    PickleIterator* iter,
+                                    param_type* r) {
+      return true<%
+              for(Parameter param: method.parameters()) {
+                  %> && <%=this.NL  
+%>              ReadParam(m, iter, &r-><%=param.name()%>)<%
+               }// end for Parameter %>;
+    }
+
+    void ParamTraits<RPC::MethodInfos<<%=rpc.Helper.convertCPPType(cls)%>>::<%=method.name()%>_Params>::Log(const param_type& p, std::string* l) {
+      // Doesn't make sense to implement this!
+    };
+    
+       <% } %>
+    <% } %>
+    <% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().allClasses()) { %>
+    <%if(rpc.Helper.isStructure(cls)) {%>
+    //ParamTraits for <%=rpc.Helper.convertCPPType(cls)%>
+    void ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >::Write(Message* m, const param_type& p) {        
+        <%for(FieldDoc param: cls.fields()) { %>
+        WriteParam(m, p.<%=param.name()%>);
+        <% } %>
+        
+    }
+    bool ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >::Read(const Message* m,
+                                    PickleIterator* iter,
+                                    param_type* r) {
+      return true<%
+              for(FieldDoc param: cls.fields()) {
+                  %> && <%=this.NL  
+%>              ReadParam(m, iter, &r-><%=param.name()%>)<%
+               }// end for fields %>;
+    }
+
+    void ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >::Log(const param_type& p, std::string* l) {
+      // Doesn't make sense to implement this!
+    };
+    
+       <% } %>
+    <% } %>
+    
+};

@@ -1,0 +1,32 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="interfaces_h" %>
+<%
+    String header_guide =rpc.Helper.getIncludeGuide(rpc.Context.Get().getCurrentPackage(), rpc.Helper.PathType.eInterfaceHeader);
+    PackageDoc thisPkg = rpc.Context.Get().getCurrentPackage();
+%>
+#ifndef <%=header_guide%>
+#define <%=header_guide%>
+#include "rpc/public/rpc_interface.h"
+<% for(PackageDoc pkgDoc : rpc.Helper.importedPackages(rpc.Context.Get().getCurrentPackage()) ) { %>
+#include "<%=rpc.Helper.getRelativePath(pkgDoc,rpc.Helper.PathType.eInterfaceHeader)%>"
+<%}%>
+<%=rpc.Helper.packageNamespaceBegine(rpc.Context.Get().getCurrentPackage())%>
+<% for( ClassDoc cls: thisPkg.allClasses()) {%>
+<% if(cls.containingClass() == null ) {
+		if( rpc.Helper.isInterface(cls) || rpc.Helper.isService(cls) ) 
+		{ 
+			interfaces_class_h cg = new interfaces_class_h();
+			%><%=cg.generate(cls)%><%
+		} else if ( rpc.Helper.isStructure(cls))
+		{
+			structure_class_h cg = new structure_class_h();
+			%><%=cg.generate(cls)%><%
+		}else if ( rpc.Helper.isEnum(cls))
+		{			
+			enum_class_h cg = new enum_class_h();
+			%><%=cg.generate(cls)%><%
+		}
+ } // if(cls.containingClass() == null) %>
+<% } // for class cls %>
+<%=rpc.Helper.packageNamespaceEnd(rpc.Context.Get().getCurrentPackage())%>
+
+#endif //#ifndef <%=header_guide%>

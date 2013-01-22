@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" 
+        	additionalparam="-d /home/jeff/chromium/src/content/rpc/gen " 
+        	classpath="/home/jeff/works/docGEN/bin" 
+        	packagenames="hbg" 
+        	sourcepath="src">
+            <doclet name="RPCAllGenerator" path="/home/jeff/works/docGEN/bin"/>
+        </javadoc>
+    </target>
+</project>

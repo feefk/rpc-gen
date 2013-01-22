@@ -1,0 +1,14 @@
+<%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="enum_class_h" %>
+    <%
+    ClassDoc cls = (ClassDoc)argument;    
+    %>
+
+        //enum <%=cls.name().replace('.', ':').replace(":", "::")%>
+        enum <%=cls.simpleTypeName()%>
+        {
+            <%
+            for(FieldDoc field: cls.fields()) { 
+            %>
+                <%=field.name()%>,
+            <% } %>
+        }; // End enum <%=cls.name().replace('.', ':').replace(":", "::")%>
