@@ -1,10 +1,11 @@
+package rpc;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.sun.javadoc.*;
 
-public class RPCProxySourceGenerator extends Doclet {
+public class RPCInterfaceHeaderGenerator extends Doclet {
 
     public static int optionLength(String s) {
         if (s.equals("-d")) {
@@ -37,9 +38,11 @@ public class RPCProxySourceGenerator extends Doclet {
                         try {
 
                             FileOutputStream out = new FileOutputStream(
-                                    rpc.Context.Get().getPath(
-                                            rpc.Helper.PathType.eProxySource));
-                            rpc.generators.proxys_cc p = new rpc.generators.proxys_cc();
+                                    rpc.Context
+                                            .Get()
+                                            .getPath(
+                                                    rpc.Helper.PathType.eInterfaceHeader));
+                            rpc.generators.interfaces_h p = new rpc.generators.interfaces_h();
                             rpc.Context.Get().setCurrentPackage(pkg);
                             out.write(p.generate(rootDoc).getBytes());
                             out.close();

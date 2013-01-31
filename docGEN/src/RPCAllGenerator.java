@@ -1,3 +1,11 @@
+import rpc.RPCFolderGenerator;
+import rpc.RPCInterfaceHeaderGenerator;
+import rpc.RPCParamsHeaderGenerator;
+import rpc.RPCParamsSourceGenerator;
+import rpc.RPCProxyHeaderGenerator;
+import rpc.RPCProxySourceGenerator;
+import rpc.RPCStubSourceGenerator;
+
 import com.sun.javadoc.*;
 
 public class RPCAllGenerator extends Doclet {

@@ -1,10 +1,11 @@
+package rpc;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.sun.javadoc.*;
 
-public class RPCParamsHeaderGenerator extends Doclet {
+public class RPCStubSourceGenerator extends Doclet {
 
     public static int optionLength(String s) {
         if (s.equals("-d")) {
@@ -37,17 +38,17 @@ public class RPCParamsHeaderGenerator extends Doclet {
                         try {
 
                             FileOutputStream out = new FileOutputStream(
-                                    rpc.Context.Get().getPath(
-                                            rpc.Helper.PathType.eParamsHeader));
-                            rpc.generators.params_h p = new rpc.generators.params_h();
+                                    rpc.Context
+                                            .Get()
+                                            .getPath(
+                                                    rpc.Helper.PathType.eStubBaseSource));
+                            rpc.generators.stubs_cc p = new rpc.generators.stubs_cc();
                             rpc.Context.Get().setCurrentPackage(pkg);
                             out.write(p.generate(rootDoc).getBytes());
                             out.close();
                         } catch (FileNotFoundException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
 

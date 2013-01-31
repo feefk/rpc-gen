@@ -3,10 +3,10 @@
     <target name="javadoc">
         <javadoc access="public" 
         	additionalparam="-d /home/jeff/chromium/src/content/rpc/gen " 
-        	classpath="/home/jeff/works/docGEN/bin" 
+        	classpath="/home/jeff/rpc_defs.jar"
         	packagenames="hbg" 
         	sourcepath="src">
-            <doclet name="RPCAllGenerator" path="/home/jeff/works/docGEN/bin"/>
+            <doclet name="RPCAllGenerator" path="/home/jeff/rpc_defs.jar"/>
         </javadoc>
     </target>
 </project>
