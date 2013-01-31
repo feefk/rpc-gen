@@ -1,2 +1,26 @@
-javadoc -classpath /home/jeff/works/docGEN/bin/ -doclet RPCAllGenerator -docletpath /home/jeff/works/docGEN/bin/ -sourcepath ./ js com.suntec.hbg com.suntec.hbg.PageRender rpc.tests -d /home/jeff/works/RPC/trunk/src/rpc/tests/gen
+javadoc -classpath /home/jeff/works/docGEN/bin/ 
+		-doclet RPCAllGenerator 
+		-docletpath /home/jeff/works/docGEN/bin/ 
+		-sourcepath ./ 
+		js com.suntec.hbg com.suntec.hbg.PageRender rpc.tests 
+		-d /home/jeff/works/RPC/trunk/src/rpc/tests/gen
+
+
+/home/liang/projects/browser/code/rpc-gen/docGEN
+
+javadoc \
+	-classpath /home/liang/projects/browser/code/rpc-gen/docGEN/bin/ \
+	-doclet RPCAllGenerator \
+	-docletpath /home/liang/projects/browser/code/rpc-gen/docGEN/bin \
+	-sourcepath ./ \
+	js hbg \
+	-d /home/liang/projects/browser/code/RPC/src/rpc/tests/gen
+
+	
+#-classpath		<路径列表>	:	指定查找用户类文件的位置
+#-doclet		<类>			:	通过替代 doclet 生成输出
+#-docletpath	<路径>		:	指定查找 doclet 类文件的位置
+#-sourcepath	<路径列表>	:	指定查找源文件的位置
+#-d				<目录>		:	输出文件的目标目录	
+
 http://172.26.9.180/repos/RPC/rpc_defs/src/
