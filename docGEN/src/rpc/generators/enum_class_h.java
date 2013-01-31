@@ -13,18 +13,18 @@ public class enum_class_h
     return result;
   }
 
-  public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
-  protected final String TEXT_1 = NL + "        //enum ";
-  protected final String TEXT_2 = NL + "        enum ";
-  protected final String TEXT_3 = NL + "        {";
-  protected final String TEXT_4 = NL + "                ";
-  protected final String TEXT_5 = ",";
-  protected final String TEXT_6 = NL + "        }; // End enum ";
+  public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl; //$NON-NLS-1$
+  protected final String TEXT_1 = NL + "        //enum "; //$NON-NLS-1$
+  protected final String TEXT_2 = NL + "        enum "; //$NON-NLS-1$
+  protected final String TEXT_3 = NL + "        {" + NL; //$NON-NLS-1$
+  protected final String TEXT_4 = "                "; //$NON-NLS-1$
+  protected final String TEXT_5 = "," + NL; //$NON-NLS-1$
+  protected final String TEXT_6 = "        }; // End enum "; //$NON-NLS-1$
 
   public String generate(Object argument)
   {
     final StringBuffer stringBuffer = new StringBuffer();
-    
+
     ClassDoc cls = (ClassDoc)argument;    
     
     stringBuffer.append(TEXT_1);
@@ -32,13 +32,13 @@ public class enum_class_h
     stringBuffer.append(TEXT_2);
     stringBuffer.append(cls.simpleTypeName());
     stringBuffer.append(TEXT_3);
-    
+
             for(FieldDoc field: cls.fields()) { 
             
     stringBuffer.append(TEXT_4);
     stringBuffer.append(field.name());
     stringBuffer.append(TEXT_5);
-     } 
+ } 
     stringBuffer.append(TEXT_6);
     stringBuffer.append(cls.name().replace('.', ':').replace(":", "::"));
     return stringBuffer.toString();

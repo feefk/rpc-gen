@@ -111,7 +111,10 @@ public class Helper {
 		if(isInterface(param))
 		{
 			return "RPC::InterfaceHandle";
-		}
+		}else if(isStructure(param))
+        {
+            return param.typeName().replace('.', ':').replace(":", "::");
+        }
 		else
 		{
 			 for(String [] e: J2CPPSTORAGE)
@@ -154,7 +157,7 @@ public class Helper {
                 }
             }
         }
-        return field.type().typeName();
+        return field.type().typeName().replace('.', ':').replaceFirst(":", "::");
     }
 	
 	public static boolean isInterface(Parameter param)
@@ -168,6 +171,18 @@ public class Helper {
 		}
 		
 	};
+	
+	public static boolean isStructure(Parameter param)
+    {
+        if(param.type().asClassDoc() != null)
+        {
+            return isStructure(param.type().asClassDoc());
+        }else
+        {
+            return false;
+        }
+        
+    };
 	
 	public static String[] getPackageUnits(PackageDoc pkg)
 	{
@@ -199,11 +214,13 @@ public class Helper {
 	
 	
 	static String [][] J2CPPTYPEMAPS = {
-		{"String","const std::string&"}
+		{"String","const std::string&"},
+		{"boolean","bool"}
 	};
 	
 	static String [][] J2CPPSTORAGE = {
-		{"String","std::string"}
+	    {"String","std::string"},
+		{"boolean","bool"}
 	};
 	
 	public static String parameterDeclare(Parameter param)
