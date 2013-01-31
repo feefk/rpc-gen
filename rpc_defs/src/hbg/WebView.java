@@ -11,7 +11,7 @@ public interface WebView {
     @StructureType
     class Settings
     {
-        public boolean js_extension_supported;
+        public bool js_extension_supported;
     };
     
     @EnumType
