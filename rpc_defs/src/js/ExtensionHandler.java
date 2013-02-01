@@ -4,7 +4,6 @@ package js;
 import rpc.annotation.AsyncMethod;
 import rpc.annotation.InterfaceType;
 import rpc.annotation.ServiceType;
-import com.suntec.hbg.PageRender.*;
 
 @ServiceType
 public interface ExtensionHandler {
