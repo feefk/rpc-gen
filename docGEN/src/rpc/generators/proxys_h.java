@@ -24,22 +24,21 @@ public class proxys_h
   protected final String TEXT_8 = "," + NL + "        "; //$NON-NLS-1$ //$NON-NLS-2$
   protected final String TEXT_9 = "public RPC::ServiceProxyBase"; //$NON-NLS-1$
   protected final String TEXT_10 = "public RPC::InterfaceProxyBase"; //$NON-NLS-1$
-  protected final String TEXT_11 = NL + "    {" + NL + "    " + NL + "    public:" + NL + "        Proxy("; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+  protected final String TEXT_11 = NL + "    {" + NL + NL + "    public:" + NL + "        Proxy("; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   protected final String TEXT_12 = "const std::string& serviceProvider, "; //$NON-NLS-1$
   protected final String TEXT_13 = "const RPC::InterfaceHandle& handle)" + NL + "               "; //$NON-NLS-1$ //$NON-NLS-2$
   protected final String TEXT_14 = ":RPC::ServiceProxyBase("; //$NON-NLS-1$
   protected final String TEXT_15 = "::ServiceName(),serviceProvider, handle)"; //$NON-NLS-1$
   protected final String TEXT_16 = ":RPC::InterfaceProxyBase(handle)"; //$NON-NLS-1$
   protected final String TEXT_17 = NL + "        {" + NL + "        }" + NL + NL; //$NON-NLS-1$ //$NON-NLS-2$
-  protected final String TEXT_18 = "        " + NL + "        virtual void "; //$NON-NLS-1$ //$NON-NLS-2$
+  protected final String TEXT_18 = NL + "        virtual void "; //$NON-NLS-1$
   protected final String TEXT_19 = "("; //$NON-NLS-1$
   protected final String TEXT_20 = ", "; //$NON-NLS-1$
   protected final String TEXT_21 = NL + "              "; //$NON-NLS-1$
-  protected final String TEXT_22 = NL + "              "; //$NON-NLS-1$
-  protected final String TEXT_23 = ");" + NL; //$NON-NLS-1$
-  protected final String TEXT_24 = "        " + NL + "    private:" + NL + "        //DISALLOW_COPY_AND_ASSIGN" + NL + "        Proxy(const Proxy&);" + NL + "        void operator=(const Proxy&);" + NL + "    };" + NL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-  protected final String TEXT_25 = "} // End namespace RPC" + NL + NL + "#endif //#ifndef "; //$NON-NLS-1$ //$NON-NLS-2$
-  protected final String TEXT_26 = NL;
+  protected final String TEXT_22 = NL + "              );" + NL; //$NON-NLS-1$
+  protected final String TEXT_23 = NL + "    private:" + NL + "        //DISALLOW_COPY_AND_ASSIGN" + NL + "        Proxy(const Proxy&);" + NL + "        void operator=(const Proxy&);" + NL + "    };" + NL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+  protected final String TEXT_24 = "} // End namespace RPC" + NL + NL + "#endif //#ifndef "; //$NON-NLS-1$ //$NON-NLS-2$
+  protected final String TEXT_25 = NL;
 
   public String generate(Object argument)
   {
@@ -112,15 +111,15 @@ if(isService){
               
     stringBuffer.append(TEXT_21);
     stringBuffer.append(rpc.Helper.parameterDeclare(param));
+
+            }//End for params 
     stringBuffer.append(TEXT_22);
- }//End for params 
-    stringBuffer.append(TEXT_23);
  } 
-    stringBuffer.append(TEXT_24);
+    stringBuffer.append(TEXT_23);
 }
-    stringBuffer.append(TEXT_25);
+    stringBuffer.append(TEXT_24);
     stringBuffer.append(header_guide);
-    stringBuffer.append(TEXT_26);
+    stringBuffer.append(TEXT_25);
     return stringBuffer.toString();
   }
 }

@@ -23,7 +23,7 @@ namespace RPC
         public <%=cppClassName%>,
         <%if(isService){%>public RPC::ServiceProxyBase<%}else{%>public RPC::InterfaceProxyBase<%}%>
     {
-    
+
     public:
         Proxy(<%if(isService){%>const std::string& serviceProvider, <%}%>const RPC::InterfaceHandle& handle)
                <%
@@ -38,7 +38,7 @@ namespace RPC
 <%
         for(MethodDoc method: cls.methods()) { 
         %>
-        
+
         virtual void <%=method.name()%>(<%
               boolean isFirstMethod = true;
               for(Parameter param: method.parameters()) { 
@@ -51,10 +51,11 @@ namespace RPC
                       %>, <%
                   }
               %>
-              <%=rpc.Helper.parameterDeclare(param)%>
-              <% }//End for params %>);
+              <%=rpc.Helper.parameterDeclare(param)%><%
+            }//End for params %>
+              );
         <% } %>
-        
+
     private:
         //DISALLOW_COPY_AND_ASSIGN
         Proxy(const Proxy&);

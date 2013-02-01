@@ -10,8 +10,8 @@
 #include "<%=rpc.Helper.getRelativePath(pkgDoc,rpc.Helper.PathType.eInterfaceHeader)%>"
 <%}%>
 <%=rpc.Helper.packageNamespaceBegine(rpc.Context.Get().getCurrentPackage())%>
-<% for( ClassDoc cls: thisPkg.allClasses()) {%>
-<% if(cls.containingClass() == null ) {
+<% for( ClassDoc cls: thisPkg.allClasses()) {
+	 if(cls.containingClass() == null ) {
 		if( rpc.Helper.isInterface(cls) || rpc.Helper.isService(cls) ) 
 		{ 
 			interfaces_class_h cg = new interfaces_class_h();
@@ -25,8 +25,8 @@
 			enum_class_h cg = new enum_class_h();
 			%><%=cg.generate(cls)%><%
 		}
- } // if(cls.containingClass() == null) %>
-<% } // for class cls %>
+    } // if(cls.containingClass() == null)
+ } // for class cls %>
 <%=rpc.Helper.packageNamespaceEnd(rpc.Context.Get().getCurrentPackage())%>
 
 #endif //#ifndef <%=header_guide%>

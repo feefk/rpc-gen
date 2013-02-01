@@ -14,7 +14,7 @@ public class enum_class_h
   }
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl; //$NON-NLS-1$
-  protected final String TEXT_1 = NL + "        //enum "; //$NON-NLS-1$
+  protected final String TEXT_1 = NL + NL + "        //enum "; //$NON-NLS-1$
   protected final String TEXT_2 = NL + "        enum "; //$NON-NLS-1$
   protected final String TEXT_3 = NL + "        {" + NL; //$NON-NLS-1$
   protected final String TEXT_4 = "                "; //$NON-NLS-1$
@@ -25,8 +25,9 @@ public class enum_class_h
   {
     final StringBuffer stringBuffer = new StringBuffer();
 
-    ClassDoc cls = (ClassDoc)argument;    
+    ClassDoc cls = (ClassDoc)argument;
     
+    stringBuffer.append("");
     stringBuffer.append(TEXT_1);
     stringBuffer.append(cls.name().replace('.', ':').replace(":", "::"));
     stringBuffer.append(TEXT_2);

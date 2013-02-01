@@ -26,7 +26,9 @@
            {
                for(ClassDoc inner: cls.innerClasses())
                {
-                       if(rpc.Helper.isService(inner)||rpc.Helper.isInterface(inner)  ) { %>
+                       if(rpc.Helper.isService(inner)||
+                       		rpc.Helper.isInterface(inner)  ) { %>
+
 
         class <%=inner.simpleTypeName()%>;<% 
                      }else if(rpc.Helper.isStructure(inner)) { %>
@@ -55,10 +57,10 @@
                       %>, <%
                   }
               %>
-              <%=rpc.Helper.parameterDeclare(param)%>
-              <% }//End for params %>) = 0;
+              <%=rpc.Helper.parameterDeclare(param)%><% }//End for params %>
+              ) DEFAULT_INTERFACE_IMPLEMENT
 
-        <% } %>        
+        <% } %>
     }; // End Class <%=cls.name().replace('.', ':').replace(":", "::")%>
     
     //Inner Interface Define
@@ -78,7 +80,5 @@
             structure_class_h cg = new structure_class_h();
             %><%=cg.generate(inner)%><%
         }
-          
-         }
+     }
     }%>
-    

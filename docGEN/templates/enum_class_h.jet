@@ -1,7 +1,7 @@
 <%@ jet package="rpc.generators" imports="com.sun.javadoc.*"  class="enum_class_h" %>
-    <%
-    ClassDoc cls = (ClassDoc)argument;    
-    %>
+<%
+    ClassDoc cls = (ClassDoc)argument;
+    %><%=""%>
 
         //enum <%=cls.name().replace('.', ':').replace(":", "::")%>
         enum <%=cls.simpleTypeName()%>

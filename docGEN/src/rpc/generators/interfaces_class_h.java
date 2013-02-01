@@ -24,7 +24,7 @@ public class interfaces_class_h
   protected final String TEXT_8 = "        static const char* ServiceName()" + NL + "        { " + NL + "            return \""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   protected final String TEXT_9 = "\"; " + NL + "        }" + NL; //$NON-NLS-1$ //$NON-NLS-2$
   protected final String TEXT_10 = "        //Inner Interface Declare" + NL; //$NON-NLS-1$
-  protected final String TEXT_11 = NL + NL + "        class "; //$NON-NLS-1$ //$NON-NLS-2$
+  protected final String TEXT_11 = NL + NL + "        class "; //$NON-NLS-1$
   protected final String TEXT_12 = ";"; //$NON-NLS-1$
   protected final String TEXT_13 = NL + NL + "        struct "; //$NON-NLS-1$
   protected final String TEXT_14 = ";"; //$NON-NLS-1$
@@ -33,11 +33,9 @@ public class interfaces_class_h
   protected final String TEXT_17 = "("; //$NON-NLS-1$
   protected final String TEXT_18 = ", "; //$NON-NLS-1$
   protected final String TEXT_19 = NL + "              "; //$NON-NLS-1$
-  protected final String TEXT_20 = NL + "              "; //$NON-NLS-1$
-  protected final String TEXT_21 = ") = 0;" + NL + NL; //$NON-NLS-1$
-  protected final String TEXT_22 = "    }; // End Class "; //$NON-NLS-1$
-  protected final String TEXT_23 = NL + "    " + NL + "    //Inner Interface Define" + NL + "    "; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-  protected final String TEXT_24 = NL + "    "; //$NON-NLS-1$
+  protected final String TEXT_20 = NL + "              ) DEFAULT_INTERFACE_IMPLEMENT" + NL + NL; //$NON-NLS-1$
+  protected final String TEXT_21 = "    }; // End Class "; //$NON-NLS-1$
+  protected final String TEXT_22 = NL + "    " + NL + "    //Inner Interface Define" + NL + "    "; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
   public String generate(Object argument)
   {
@@ -75,7 +73,8 @@ if(rpc.Helper.isService(cls)){
            {
                for(ClassDoc inner: cls.innerClasses())
                {
-                       if(rpc.Helper.isService(inner)||rpc.Helper.isInterface(inner)  ) { 
+                       if(rpc.Helper.isService(inner)||
+                       		rpc.Helper.isInterface(inner)  ) { 
     stringBuffer.append(TEXT_11);
     stringBuffer.append(inner.simpleTypeName());
     stringBuffer.append(TEXT_12);
@@ -117,13 +116,12 @@ if(rpc.Helper.isService(cls)){
               
     stringBuffer.append(TEXT_19);
     stringBuffer.append(rpc.Helper.parameterDeclare(param));
-    stringBuffer.append(TEXT_20);
  }//End for params 
-    stringBuffer.append(TEXT_21);
+    stringBuffer.append(TEXT_20);
  } 
-    stringBuffer.append(TEXT_22);
+    stringBuffer.append(TEXT_21);
     stringBuffer.append(cls.name().replace('.', ':').replace(":", "::"));
-    stringBuffer.append(TEXT_23);
+    stringBuffer.append(TEXT_22);
  if(cls.innerClasses() != null)
     {
          for(ClassDoc inner: cls.innerClasses())
@@ -144,10 +142,8 @@ if(rpc.Helper.isService(cls)){
     stringBuffer.append(cg.generate(inner));
 
         }
-          
-         }
+     }
     }
-    stringBuffer.append(TEXT_24);
     return stringBuffer.toString();
   }
 }

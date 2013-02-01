@@ -44,7 +44,7 @@ public class interfaces_h
     stringBuffer.append(rpc.Helper.packageNamespaceBegine(rpc.Context.Get().getCurrentPackage()));
     stringBuffer.append(TEXT_6);
  for( ClassDoc cls: thisPkg.allClasses()) {
- if(cls.containingClass() == null ) {
+	 if(cls.containingClass() == null ) {
 		if( rpc.Helper.isInterface(cls) || rpc.Helper.isService(cls) ) 
 		{ 
 			interfaces_class_h cg = new interfaces_class_h();
@@ -64,9 +64,9 @@ public class interfaces_h
     stringBuffer.append(cg.generate(cls));
 
 		}
- } // if(cls.containingClass() == null) 
-    stringBuffer.append(TEXT_7);
+    } // if(cls.containingClass() == null)
  } // for class cls 
+    stringBuffer.append(TEXT_7);
     stringBuffer.append(rpc.Helper.packageNamespaceEnd(rpc.Context.Get().getCurrentPackage()));
     stringBuffer.append(TEXT_8);
     stringBuffer.append(header_guide);
