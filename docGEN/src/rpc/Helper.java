@@ -287,9 +287,10 @@ public class Helper {
         String ret = "";
         if(param.type() != null 
                 && param.type().asClassDoc() != null 
-                &&param.type().asClassDoc().annotations() != null)
+                && param.type().asClassDoc().annotations() != null)
             
         RETURN: {
+        
         for(AnnotationDesc an : param.type().asClassDoc().annotations())
         {
             if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.InterfaceType") 
@@ -305,15 +306,21 @@ public class Helper {
                 break RETURN;
              }
         }
-        for(String [] e: J2CPPSTORAGE)
-        {
-            if(e[0].equals(param.type().qualifiedTypeName()))
-            {
-                ret = e[1];
-                break RETURN;
-            }
+        
         }
-        ret = param.type().qualifiedTypeName();
+        if(ret.length() == 0)
+        {
+            RESET:{
+                for(String [] e: J2CPPSTORAGE)
+                {
+                    if(e[0].equals(param.type().qualifiedTypeName()))
+                    {
+                        ret = e[1];
+                        break RESET;
+                    }
+                }
+                ret = param.type().qualifiedTypeName();
+            }
         }
         
         if(param.type().dimension().length()>0)
