@@ -43,7 +43,7 @@ namespace RPC
         for(Parameter param: method.parameters()) {
         //if(rpc.Helper.isInterface(rpc.Context.Get().getRoot().classNamed(param.type()))
         %>
-        IPC::ParamTraits< <%=rpc.Helper.getParamTraitsType(param)%> >::Write(msg, <%
+        IPC::ParamTraits<<%=rpc.Helper.parameterStorageType(param)%> >::Write(msg, <%
         	if(rpc.Helper.isInterface(param))
         	{
         		%><%=param.name()%>->handle()<%

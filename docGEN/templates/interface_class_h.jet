@@ -27,9 +27,11 @@
                for(ClassDoc inner: cls.innerClasses())
                {
                        if(rpc.Helper.isService(inner)||rpc.Helper.isInterface(inner)  ) { %>
-         class <%=inner.simpleTypeName()%>;<% 
+
+        class <%=inner.simpleTypeName()%>;<% 
                      }else if(rpc.Helper.isStructure(inner)) { %>
-         struct <%=inner.simpleTypeName()%>;<%
+
+        struct <%=inner.simpleTypeName()%>;<%
                      }else if( rpc.Helper.isEnum(inner) ) { 
                         enum_class_h cg = new enum_class_h();
             %><%=cg.generate(inner)%><%

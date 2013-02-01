@@ -28,7 +28,7 @@ public class proxys_cc
   protected final String TEXT_12 = ")" + NL + "      {" + NL + "        RPC::Message::Header header;        " + NL + "        header.message_type = RPC::MethodInfos<"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   protected final String TEXT_13 = ">::"; //$NON-NLS-1$
   protected final String TEXT_14 = "_Params::ID;        " + NL + "        header.source.peer = ProcessState::self()->master_proxy()->localPeerId();" + NL + "        IPC::Message* msg = new IPC::Message(this->handle().address, RPC::Message::ID, IPC::Message::PRIORITY_NORMAL);" + NL + "        IPC::ParamTraits<RPC::Message::Header>::Write(msg, header);" + NL; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-  protected final String TEXT_15 = "        IPC::ParamTraits< "; //$NON-NLS-1$
+  protected final String TEXT_15 = "        IPC::ParamTraits<"; //$NON-NLS-1$
   protected final String TEXT_16 = " >::Write(msg, "; //$NON-NLS-1$
   protected final String TEXT_17 = "->handle()"; //$NON-NLS-1$
   protected final String TEXT_18 = ");" + NL; //$NON-NLS-1$
@@ -92,7 +92,7 @@ public class proxys_cc
         //if(rpc.Helper.isInterface(rpc.Context.Get().getRoot().classNamed(param.type()))
         
     stringBuffer.append(TEXT_15);
-    stringBuffer.append(rpc.Helper.getParamTraitsType(param));
+    stringBuffer.append(rpc.Helper.parameterStorageType(param));
     stringBuffer.append(TEXT_16);
 
         	if(rpc.Helper.isInterface(param))

@@ -104,7 +104,12 @@ public class Helper {
 		return cls.qualifiedTypeName().replace(".", "::");
 	};
 	
-	
+//	enum TypePlace
+//	{
+//	    eParameterDeclare,
+//	    eParameterStoreage,
+//	    eParameterStoreage
+//	};
 	
 	public static String getParamTraitsType(Parameter param)
 	{
@@ -113,19 +118,19 @@ public class Helper {
 			return "RPC::InterfaceHandle";
 		}else if(isStructure(param))
         {
-            return param.typeName().replace('.', ':').replace(":", "::");
+            return param.type().qualifiedTypeName().replace('.', ':').replace(":", "::");
         }
 		else
 		{
 			 for(String [] e: J2CPPSTORAGE)
 			{
-				if(e[0].equals(param.typeName()))
+				if(e[0].equals(param.type().qualifiedTypeName()))
 				{
 					return e[1];
 				}
 			}
 		}
-		return param.typeName();
+		return param.type().qualifiedTypeName();
 	}
 	
 	
@@ -141,7 +146,7 @@ public class Helper {
         
     };
 	
-	public static String getFieldTraitsType(FieldDoc field)
+	static String getFieldTraitsTypeInternal(FieldDoc field)
     {
         if(isInterface(field))
         {
@@ -158,6 +163,11 @@ public class Helper {
             }
         }
         return field.type().typeName().replace('.', ':').replaceFirst(":", "::");
+    }
+	
+	public static String getFieldTraitsType(FieldDoc field)
+    {
+	    return getFieldTraitsTypeInternal(field);
     }
 	
 	public static boolean isInterface(Parameter param)
@@ -215,70 +225,108 @@ public class Helper {
 	
 	static String [][] J2CPPTYPEMAPS = {
 		{"String","const std::string&"},
-		{"boolean","bool"}
+		{"boolean","bool"},
+		{"Long","int64"}
 	};
 	
 	static String [][] J2CPPSTORAGE = {
+	    {"java.lang.String","std::string"},
 	    {"String","std::string"},
-		{"boolean","bool"}
+		{"boolean","bool"},
+	    {"Long","int64"}
+	};
+	
+	static String parameterDeclareType(Parameter param)
+	{
+		if(param.type() != null 
+				&& param.type().asClassDoc() != null 
+				&&param.type().asClassDoc().annotations() != null)
+		for(AnnotationDesc an : param.type().asClassDoc().annotations())
+		{
+			if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.InterfaceType") 
+					|| an.annotationType().qualifiedTypeName().equals("rpc.annotation.ServiceType"))
+			{
+					return param.type().qualifiedTypeName().replace(".", "::") + "*";
+			}else if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.StructureType")) 
+            {
+			    if(param.type().dimension().length() >1)
+			    {
+                    return param.type().qualifiedTypeName().replace(".", "::");
+			    }else
+			    {
+			        return "const " + param.type().qualifiedTypeName().replace(".", "::") + "&";
+			    }
+            }else if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.EnumType")) 
+            {
+                return param.type().qualifiedTypeName().replace(".", "::");
+            }
+		}
+		
+		for(String [] e: ( param.type().dimension().length() >1 ? J2CPPSTORAGE : J2CPPTYPEMAPS ))
+		{
+			if(e[0].equals(param.typeName()))
+			{
+				return e[1];
+			}
+		}
+		return param.typeName();
 	};
 	
 	public static String parameterDeclare(Parameter param)
-	{
-		if(param.type() != null 
-				&& param.type().asClassDoc() != null 
-				&&param.type().asClassDoc().annotations() != null)
-		for(AnnotationDesc an : param.type().asClassDoc().annotations())
-		{
-			if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.InterfaceType") 
-					|| an.annotationType().qualifiedTypeName().equals("rpc.annotation.ServiceType"))
-			{
-					return param.type().qualifiedTypeName().replace(".", "::") + "* " + param.name();
-			}else if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.StructureType")) 
+    {
+	    if(param.type().dimension().length()>0)
+	    {
+	       return "std::vector<" + parameterDeclareType(param) + " >& "+ param.name();
+	    }else{
+	        return parameterDeclareType(param) + " " + param.name();
+	    }
+    };
+    
+    public static String parameterStorageType(Parameter param)
+    {
+        String ret = "";
+        if(param.type() != null 
+                && param.type().asClassDoc() != null 
+                &&param.type().asClassDoc().annotations() != null)
+            
+        RETURN: {
+        for(AnnotationDesc an : param.type().asClassDoc().annotations())
+        {
+            if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.InterfaceType") 
+                    || an.annotationType().qualifiedTypeName().equals("rpc.annotation.ServiceType"))
             {
-                    return "const " + param.type().qualifiedTypeName().replace(".", "::") + "& " + param.name();
-            }else if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.EnumType")) 
+                ret= "RPC::InterfaceHandle";
+                break RETURN;
+            }else
+             if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.StructureType") 
+                || an.annotationType().qualifiedTypeName().equals("rpc.annotation.EnumType"))
+             {
+                ret=  convertCPPType(param.type().asClassDoc());
+                break RETURN;
+             }
+        }
+        for(String [] e: J2CPPSTORAGE)
+        {
+            if(e[0].equals(param.type().qualifiedTypeName()))
             {
-                return param.type().qualifiedTypeName().replace(".", "::")  + param.name();
+                ret = e[1];
+                break RETURN;
             }
-			
-		}
-		for(String [] e: J2CPPTYPEMAPS)
-		{
-			if(e[0].equals(param.typeName()))
-			{
-				return e[1]+ " " + param.name();
-			}
-		}
-		return param.typeName() + " " + param.name();
-	};
+        }
+        ret = param.type().qualifiedTypeName();
+        }
+        
+        if(param.type().dimension().length()>0)
+        {
+           return "std::vector<" + ret + " > ";
+        }else{
+            return ret;
+        }
+    }
 	
 	public static String parameterStorage(Parameter param)
 	{
-		if(param.type() != null 
-				&& param.type().asClassDoc() != null 
-				&&param.type().asClassDoc().annotations() != null)
-		for(AnnotationDesc an : param.type().asClassDoc().annotations())
-		{
-			if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.InterfaceType") 
-					|| an.annotationType().qualifiedTypeName().equals("rpc.annotation.ServiceType"))
-			{
-					return "RPC::InterfaceHandle " + param.name();
-			}else
-			 if(an.annotationType().qualifiedTypeName().equals("rpc.annotation.StructureType") 
-	            || an.annotationType().qualifiedTypeName().equals("rpc.annotation.EnumType"))
-	         {
-	            return convertCPPType(param.type().asClassDoc()) + " " + param.name();
-	         }
-		}
-		for(String [] e: J2CPPSTORAGE)
-		{
-			if(e[0].equals(param.typeName()))
-			{
-				return e[1]+ " " + param.name();
-			}
-		}
-		return param.typeName() + " " + param.name();
+          return parameterStorageType(param) + " " + param.name();
 	};
 	
 	@SuppressWarnings("deprecation")

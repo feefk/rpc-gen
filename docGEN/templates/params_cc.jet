@@ -54,4 +54,23 @@ namespace IPC
        <% } %>
     <% } %>
     
+    <% for(ClassDoc cls: rpc.Context.Get().getCurrentPackage().allClasses()) { %>
+    <%if(rpc.Helper.isEnum(cls)) {%>
+    //ParamTraits for <%=rpc.Helper.convertCPPType(cls)%>
+    void ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >::Write(Message* m, const param_type& p) {        
+        ParamTraits<int>::Write(m, (int)p);
+    }
+    bool ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >::Read(const Message* m,
+                                    PickleIterator* iter,
+                                    param_type* r) {
+      return ParamTraits<int>::Read(m, iter, (int*)r);
+    }
+
+    void ParamTraits<<%=rpc.Helper.convertCPPType(cls)%> >::Log(const param_type& p, std::string* l) {
+      // Doesn't make sense to implement this!
+    };
+    
+       <% } %>
+    <% } %>
+    
 };
