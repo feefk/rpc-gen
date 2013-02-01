@@ -1,9 +1,5 @@
 package hbg;
-import rpc.annotation.InterfaceType;
-import rpc.annotation.ServiceType;
-import rpc.annotation.StructureType;
-import rpc.annotation.EnumType;
-
+import rpc.annotation.*;
 
 @InterfaceType
 public interface WebView {
@@ -14,6 +10,58 @@ public interface WebView {
         public boolean js_extension_supported;
     };
     
+    
+    @EnumType
+    enum SurfaceType
+    {
+        eClientFrameBuffer,
+        eServiceFrameBuffer,
+        eClientWindow,
+        eHardware,
+    };
+    
+    @StructureType
+    class Rect
+    {
+        public int x;
+        public int y;
+        public int width;
+        public int hidth;
+    };
+    
+    @StructureType
+    class Position
+    {
+        public int x;
+        public int y;
+    };
+    
+    @EnumType
+    enum TraceDevice
+    {
+        eTouchPad,
+        eMultiTouch,
+        eMouse,
+     };
+     
+     @EnumType
+     enum MediaPlayerType
+     {
+         eExternalPlayer,
+         eInnternalPlayer,
+         eNone,
+      };
+
+    
+    @StructureType
+    class Preferences
+    {
+       public SurfaceType surfaceType;
+       public Rect surfaceRect;
+       public TraceDevice input;
+       public MediaPlayerType playerType;
+    };
+    
     @EnumType
     enum TouchEventType
     {
@@ -22,12 +70,34 @@ public interface WebView {
         eTouchEventMoved,
     };
     
+    @StructureType
+    class TouchItem
+    {
+        public int identifier;
+        public Position pos;
+        public float force;
+    };
+    
+    @StructureType
+    class TouchEvent
+    {
+        public TouchEventType type;
+        public TouchItem[] items;
+    };
+    
+    @StructureType
+    class Surface
+    {
+        public SurfaceType type;
+        public Long handle;
+    };
+    
     @InterfaceType
     interface WebViewClient
     {
         void OnWebViewCreated(WebView render);
         
-        void OnResized(int width, int height);
+        void OnMoved(Rect targetArea);
         
         void OnTitleChanged(String title);
         
@@ -35,8 +105,8 @@ public interface WebView {
         
         void OnExternalLinkClicked(String url);
         
-        void OnPaint();
-       
+        void OnSurfaceSwaped(Surface front, Surface backend);
+        
     }
     
     @ServiceType
@@ -45,15 +115,23 @@ public interface WebView {
         void CreateWebView(WebViewClient client);
     }
     
-    void SetSetting(Settings settings);
+    void SetPreferences(Preferences pref);
     
-    void Resize(int width, int height);
+    void AttachSurface(Surface a, Surface b);
+    
+    void SwapSurface();
+    
+    void Show();
+    
+    void Hide();
+    
+    void Move(Rect targetArea);
 
     void LoadURL(String url);
     
-    void ProcessHostTouchEvent();
+    void PostTouchEvent(TouchEvent event);
     
-    void ProcessHostKeyEvent();
+    void Navigate(int offset);
     
     void Close();
 
