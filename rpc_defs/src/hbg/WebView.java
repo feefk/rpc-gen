@@ -4,12 +4,6 @@ import rpc.annotation.*;
 @InterfaceType
 public interface WebView {
     
-    @StructureType
-    class Settings
-    {
-        public boolean js_extension_supported;
-    };
-    
     
     @EnumType
     enum SurfaceType
@@ -121,13 +115,11 @@ public interface WebView {
     
     void SwapSurface();
     
-    void Show();
+    void SetVisible(boolean visible);
     
-    void Hide();
+    void LoadURL(String url);
     
     void Move(Rect targetArea);
-
-    void LoadURL(String url);
     
     void PostTouchEvent(TouchEvent event);
     
