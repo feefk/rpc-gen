@@ -6,6 +6,7 @@
 #ifndef <%=header_guide%>
 #define <%=header_guide%>
 #include "rpc/public/rpc_interface.h"
+#include "base/basictypes.h"
 <% for(PackageDoc pkgDoc : rpc.Helper.importedPackages(rpc.Context.Get().getCurrentPackage()) ) { %>
 #include "<%=rpc.Helper.getRelativePath(pkgDoc,rpc.Helper.PathType.eInterfaceHeader)%>"
 <%}%>
