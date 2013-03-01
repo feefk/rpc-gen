@@ -107,11 +107,11 @@ public interface WebView {
     public interface FactoryService 
     {
         void CreateWebView(WebViewClient client);
+        
+        void CreateWebViewWithCustomWindow(WebViewClient client,Long win ,Long off_screen);
     }
     
     void SetPreferences(Preferences pref);
-    
-    void AttachSurface(Surface a, Surface b);
     
     void SwapSurface();
     
