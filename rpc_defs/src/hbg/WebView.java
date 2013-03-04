@@ -64,6 +64,25 @@ public interface WebView {
         eTouchEventMoved,
     };
     
+    @EnumType
+    enum SourceLocation{
+        SOURCE_LOCAL,
+        SOURCE_REMOTE,
+        SOURCE_HYBRID
+    };
+    
+    @StructureType
+    class AppConfigure
+    {
+    	public int                	appID;
+    	public String        		remotePath;
+    	public String        		localPath;
+    	public String        		startUrl;
+    	public boolean              isSetup;    
+    	public boolean              trustedApp;
+    	public SourceLocation     	sourceLocation;
+    };
+    
     @StructureType
     class TouchItem
     {
@@ -118,6 +137,10 @@ public interface WebView {
     void SetVisible(boolean visible);
     
     void LoadURL(String url);
+    
+    void SetSize(int width, int height);
+    
+    void LoadApp(AppConfigure config);
     
     void Move(Rect targetArea);
     

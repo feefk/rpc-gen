@@ -226,14 +226,16 @@ public class Helper {
 	static String [][] J2CPPTYPEMAPS = {
 		{"String","const std::string&"},
 		{"boolean","bool"},
-		{"Long","int64"}
+		{"Long","int64"},
+		{"java.lang.Long","int64"}
 	};
 	
 	static String [][] J2CPPSTORAGE = {
 	    {"java.lang.String","std::string"},
 	    {"String","std::string"},
 		{"boolean","bool"},
-	    {"Long","int64"}
+	    {"Long","int64"},
+		{"java.lang.Long","int64"}
 	};
 	
 	static String parameterDeclareType(Parameter param)
