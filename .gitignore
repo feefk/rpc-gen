@@ -25,3 +25,16 @@ src/shell_qt/Makefile
 .cproject
 .project
 *.class
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
