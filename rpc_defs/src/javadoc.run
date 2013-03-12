@@ -1,10 +1,3 @@
-javadoc -classpath /home/jeff/works/docGEN/bin/ 
-		-doclet RPCAllGenerator 
-		-docletpath /home/jeff/works/docGEN/bin/ 
-		-sourcepath ./ 
-		js com.suntec.hbg com.suntec.hbg.PageRender rpc.tests 
-		-d /home/jeff/works/RPC/trunk/src/rpc/tests/gen
-
 
 /home/liang/projects/browser/code/rpc-gen/docGEN
 
